@@ -45,3 +45,20 @@ def main():
 
 
 main()
+
+
+-------
+        
+        for a in remaining_string:
+            for symbol in grammar_rule:
+
+                if symbol == '':   # '' == epsilon
+                    continue
+
+                    if a == symbol:
+                        continue # Follow this instruction
+                    else: # Next grammar_rule
+                        if current_nonterminal_index+1 < len(nonterminal_array):
+                            current_nonterminal = nonterminal_array[current_nonterminal_index+1]  # maybe recursive here doing the same
+                        else:
+                            break

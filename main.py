@@ -1,26 +1,31 @@
-def recursive(grammar, string, nonterminal_array, current_nonterminal_index):
+def recursive(grammar, string, nonterminal_array, current_string_index,first):
 
-    current_nonterminal = nonterminal_array[current_nonterminal_index]
+    # current_nonterminal = nonterminal_array[current_nonterminal_index]
 
-    if current_nonterminal in grammar:
-        for grammar_rule in grammar[current_nonterminal]:
-            remaining_string = string  # Think line can be removed - it's a duplicate from string
+    if first in grammar:
+
+        for grammar_rule in grammar[first]:
+            non_current = current_string_index  # Save in case it doesn't work
+            is_valid = True
+            # remaining_string = string  # Think line can be removed - it's a duplicate from string
+
             for symbol in grammar_rule:  # symbol == a
+                if symbol in nonterminal_array:
+                    is_valid, current_string_index = recursive(grammar, string, nonterminal_array, current_string_index, symbol)
+                elif current_string_index < len(string) and symbol == string[current_string_index]:
+                    current_string_index += 1
+                else:
+                    is_valid = False
+                    break
 
-                if symbol == '':  # '' == epsilon
-                    continue
+            if is_valid:
+                if non_current == current_string_index:
+                    is_valid = False
+                return is_valid, current_string_index
 
-                if remaining_string == symbol:
-                    return False
-                remaining_string = remaining_string[1:]
+            current_string_index = non_current
 
-            if recursive(grammar, remaining_string, grammar_rule[-1], current_nonterminal_index):  # Dont get it
-                return True
-
-    elif string and string[0] == current_nonterminal:
-        return recursive(grammar, string[1:], current_nonterminal, current_nonterminal_index)
-
-    return False
+    return False, current_string_index
 
 
 def main():
@@ -41,10 +46,10 @@ def main():
         print(grammar)
 
     for i in range(k):
-        strings = input("Enter string to analyze: ").strip()
-        # result = recursive(grammar, strings, "S")
-        result = recursive(grammar, strings, nonterminals_array, 0)
-        print("yes" if result else "no")
+        string = input("Enter string to analyze: ").strip()
+        is_valid, finished = recursive(grammar, string, nonterminals_array, 0, 'S')
+        print("yes" if is_valid and finished == len(string) else "no")
 
+    print("The program has finished.")
 
 main()

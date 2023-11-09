@@ -62,3 +62,43 @@ main()
                             current_nonterminal = nonterminal_array[current_nonterminal_index+1]  # maybe recursive here doing the same
                         else:
                             break
+
+
+
+
+        def recursive(grammar, string, nonterminal_array, current_nonterminal_index):
+
+        current_nonterminal = nonterminal_array[current_nonterminal_index]
+
+        if current_nonterminal in grammar:
+            for grammar_rule in grammar[current_nonterminal]:
+                remaining_string = string  # Think line can be removed - it's a duplicate from string
+            for symbol in grammar_rule:  # symbol == a
+
+                if symbol == '':  # '' == epsilon
+                    continue
+
+                if remaining_string == symbol:
+                    return False
+                remaining_string = remaining_string[1:]
+
+            if recursive(grammar, remaining_string, grammar_rule[-1], current_nonterminal_index):  # Dont get it
+                return True
+
+        elif string and string[0] == current_nonterminal:
+            return recursive(grammar, string[1:], current_nonterminal, current_nonterminal_index)
+
+        return False
+
+
+        for symbol in grammar_rule:
+            if symbol in nonterminal_array:
+                result, current_nonterminal_index = recursive(grammar, string, nonterminal_array, current_nonterminal_index, symbol)
+                if not result:
+                    break
+                else:
+                    if current_nonterminal_index < len(string) and symbol == string[current_nonterminal_index]:
+                        current_nonterminal_index += 1
+                    else:
+                        result = False
+                        break
